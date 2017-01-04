@@ -13,6 +13,7 @@ namespace Showaspnetcore
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls("http://*:8082")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
