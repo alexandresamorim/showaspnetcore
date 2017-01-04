@@ -1,0 +1,54 @@
+﻿@model ICollection<Showaspnetcore.Model.Paciente>
+
+@{
+    Layout = "_Layout";
+}
+
+<section class="content-header">
+
+    <ol class="breadcrumb">
+        <li><a asp-area="Admin" asp-controller="Pacientes" asp-action="Index"><i class="fa fa-dashboard"></i> Inicio</a></li>
+        <li class="active">Pesquisa de Paciêntes</li>
+        <li class="pull-right"><a asp-area="Admin" asp-controller="Pacientes" asp-action="Create"><i class="fa fa-plus-circle "></i> Novo</a></li>
+    </ol>
+</section>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="box-body">
+            <table id="example1" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Espécie</th>
+                        <th>Raça</th>
+                        <th>Seção</th>
+                        <th class="text-right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model)
+                {
+                    <tr>
+
+                        <td></td>
+                        <td>@item.Name</td>
+                        <td>@item.Proprietario</td>
+                        <td></td>
+                        <td></td>
+
+
+
+                        <td class="project-actions">
+                            <a asp-area="Admin" asp-controller="Paciente" asp-action="Detalhe" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> View </a>
+                            <a href="#" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                        </td>
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+    </div>
+</div>
