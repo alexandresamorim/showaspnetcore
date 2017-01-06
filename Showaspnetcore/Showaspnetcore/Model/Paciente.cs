@@ -8,10 +8,16 @@ namespace Showaspnetcore.Model
         public Paciente()
         {
             PacienteGuid = Guid.NewGuid();
+
+            Cliente = new Cliente()
+            {
+                Nome = "Alexandre Amorim"
+            };
         }
-        public ObjectId Id { get; set; }
+        public object Id { get; set; }
         public Guid PacienteGuid { get; set; }
         public string Name { get; set; }
+        public Cliente Cliente { get; set; }
         public string Proprietario { get; set; }
         public DateTime DataCadastro { get; set; }
     }
