@@ -14,7 +14,6 @@ using MongoDB.Driver;
 using AspNetCore.Identity.MongoDB;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.DataProtection;
 using Showaspnetcore.Model;
 
 namespace Showaspnetcore
@@ -52,6 +51,8 @@ namespace Showaspnetcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession();
+
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDb"));
             services.AddSingleton<IUserStore<MongoIdentityUser>>(provider =>
             {
@@ -115,6 +116,8 @@ namespace Showaspnetcore
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseSession();
 
             app.UseApplicationInsightsRequestTelemetry();
 

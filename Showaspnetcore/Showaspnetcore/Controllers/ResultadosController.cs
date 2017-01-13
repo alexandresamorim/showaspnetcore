@@ -27,7 +27,9 @@ namespace Showaspnetcore.Controllers
         private UserManager<MongoIdentityUser> _userManager;
 
         private IHostingEnvironment _env;
-        public ResultadosController(MongoClient client, UserManager<MongoIdentityUser> userManager, IHostingEnvironment env)
+
+        public ResultadosController(MongoClient client, UserManager<MongoIdentityUser> userManager,
+            IHostingEnvironment env)
         {
             _userManager = userManager;
             var database = client.GetDatabase("resultadofacildb");
@@ -40,7 +42,7 @@ namespace Showaspnetcore.Controllers
         public IActionResult Index()
         {
             var usuarioId = _userManager.GetUserId(User);
-            
+
             var filter = Builders<ResultadoExame>.Filter.Regex("UsuarioId", usuarioId);
             var resultados = resultadoCollection.Find(filter).ToList();
 
@@ -50,11 +52,12 @@ namespace Showaspnetcore.Controllers
         public ActionResult Create()
         {
             var filterPaciente = Builders<Paciente>.Filter.Regex("Name", "//");
-            ViewBag.pacientesViewList = pacienteCollection.Find(filterPaciente).ToList().Select(x => new SelectListItem()
-            {
-                Value = x.PacienteGuid.ToString(),
-                Text = x.Name
-            });
+            ViewBag.pacientesViewList =
+                pacienteCollection.Find(filterPaciente).ToList().Select(x => new SelectListItem()
+                {
+                    Value = x.PacienteGuid.ToString(),
+                    Text = x.Name
+                });
 
             return View();
         }
@@ -63,11 +66,10 @@ namespace Showaspnetcore.Controllers
         public async Task<ActionResult> Create(ResultadoExame person)
         {
             var filterPaciente = Builders<Paciente>.Filter.Eq("PacienteGuid", person.PacienteGuid);
-            person.Paciente =  pacienteCollection.Find(filterPaciente).FirstOrDefault();
+            person.Paciente = pacienteCollection.Find(filterPaciente).FirstOrDefault();
 
             person.UsuarioId = _userManager.GetUserId(User);
-
-
+            
             await resultadoCollection.InsertOneAsync(person);
             return View(Edit(person.ResultadoExameGuid));
         }
@@ -76,7 +78,7 @@ namespace Showaspnetcore.Controllers
         {
             string uploads = Path.Combine("Data", "Imagens");
 
-            
+
             string posts = Path.Combine("Data", "Posts");
             var _files = Directory.EnumerateFiles(posts);
 
@@ -91,13 +93,26 @@ namespace Showaspnetcore.Controllers
         }
 
         [HttpGet]
-        public FileStreamResult Download(int id)
+        public ActionResult Download(Guid imagemGuid, Guid resultadoGuid)
         {
-            var fileDescription = "";//fileRepository.GetFileDescription(id);
+            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
+            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
 
-            var path = "";
-            var stream = new FileStream(path, FileMode.Open);
-            return File(stream, fileDescription);
+            var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
+
+            var pathFull = GetPathAndFilename(imagem.Local);
+
+            HttpContext.Response.ContentType = imagem.Formato;
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(pathFull), imagem.Formato)
+            {
+                FileDownloadName = imagem.Local
+            };
+
+            return result;
+            /*
+            FileStream stream = new FileStream(pathFull, FileMode.Open);
+            //byte[] fileBytes = System.IO.File.ReadAllBytes(pathFull);
+            return File(stream, "application/pdf", pathFull);*/
         }
 
         [HttpPost]
@@ -105,6 +120,7 @@ namespace Showaspnetcore.Controllers
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
             var exame = resultadoCollection.Find(filter).FirstOrDefault();
+            var descricao = Request.Form["txtDescricao"].ToString();
 
             foreach (IFormFile file in files)
             {
@@ -120,6 +136,7 @@ namespace Showaspnetcore.Controllers
                 exame.Imagens.Add(new Imagem()
                 {
                     ResultadoExameGuid = resultado.ResultadoExameGuid,
+                    Descricao = descricao,
                     Local = filename,
                     Length = file.Length,
                     Formato = file.ContentType
@@ -129,11 +146,12 @@ namespace Showaspnetcore.Controllers
                 var update = Builders<ResultadoExame>.Update
                     .Set("Imagens", exame.Imagens);
 
-                var result =  resultadoCollection.UpdateOneAsync(filterUpdate, update);
+                var result = resultadoCollection.UpdateOneAsync(filterUpdate, update);
 
             }
-            return View(Edit(resultado.ResultadoExameGuid));
+            return RedirectToAction("Edit", new {resultadoGuid = resultado.ResultadoExameGuid});
         }
+
         private string EnsureCorrectFilename(string filename)
         {
             if (filename.Contains("\\"))
@@ -144,7 +162,6 @@ namespace Showaspnetcore.Controllers
 
         private string GetPathAndFilename(string filename)
         {
-
             return _env.WebRootPath + "\\exames\\" + filename;
         }
 
@@ -153,7 +170,45 @@ namespace Showaspnetcore.Controllers
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
             var resultado = resultadoCollection.Find(filter).FirstOrDefault();
 
+            ViewBag.PastaRoot = _env.WebRootPath;
             return View(resultado);
+        }
+
+        public IActionResult DeleteFile(Guid imagemGuid, Guid resultadoGuid)
+        {
+            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
+            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+
+            var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
+
+            resultado.Imagens.Remove(imagem);
+
+
+            var filterUpdate = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
+            var update = Builders<ResultadoExame>.Update
+                .Set("Imagens", resultado.Imagens);
+
+            resultadoCollection.UpdateOneAsync(filterUpdate, update);
+
+            var pathFull = GetPathAndFilename(imagem.Local);
+            if (System.IO.File.Exists(pathFull))
+                System.IO.File.Delete(pathFull);
+
+            TempData["NossoErro"] = "Arquivo excluido com sucesso";
+
+
+            return RedirectToAction("Edit", new {resultadoGuid = resultado.ResultadoExameGuid});
+        }
+
+        public IActionResult AlterarDescricao(Guid imagemGuid, Guid resultadoExameGuid, string descricao)
+        {
+            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoExameGuid);
+            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+            var imagemResult = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
+
+            imagemResult.Descricao = descricao;
+
+            return RedirectToAction("Edit", new { resultadoGuid = resultadoExameGuid });
         }
     }
 }
