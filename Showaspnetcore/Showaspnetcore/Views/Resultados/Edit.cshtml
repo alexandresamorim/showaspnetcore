@@ -1,0 +1,55 @@
+﻿@model Showaspnetcore.Model.ResultadoExame
+
+@{
+    Layout = "_Layout";
+}
+
+<form asp-controller="Resultados" asp-action="UploadFiles" enctype="multipart/form-data" method="post">
+
+    @Html.HiddenFor(f => f.ResultadoExameGuid)
+
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>
+                            @Model.Paciente.Name <small></small>
+                        </h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="container">
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>Adiconar arquivos ...</span>
+                            <input type="file" name="files" multiple />
+                            <input type="submit" value="Upload Selected Files" />
+                        </span><br />
+
+                        <table>
+                            <tr>
+                                <th>Arquivo</th>
+                                <th>Tamanho</th>
+                                <th>Visualizar</th>
+                            </tr>
+                            <tbody>
+                                @foreach (var image in Model.Imagens)
+                                {
+                                    <tr>
+                                        <td>@image.Local</td>
+                                        <td>@((image.Length / 1024).ToString("N2")) KB</td>
+                                        <td class="project-actions">
+                                            <a asp-controller="Resultados" asp-action="Edit" asp-route-imagemGuid=@image.ImagemGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

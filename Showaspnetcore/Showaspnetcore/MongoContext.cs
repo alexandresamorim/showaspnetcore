@@ -24,6 +24,14 @@ namespace Showaspnetcore
                 return paciente;
             }
         }
+        public IMongoCollection<Paciente> ResultadoExamesCollection
+        {
+            get
+            {
+                var resultados = _db.GetCollection<Paciente>("ResultadoExames");
+                return resultados;
+            }
+        }
         public void Dispose()
         {
 

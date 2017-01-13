@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Bson;
+using Showaspnetcore.Interface;
 
 namespace Showaspnetcore.Model
 {
@@ -9,10 +10,6 @@ namespace Showaspnetcore.Model
         {
             PacienteGuid = Guid.NewGuid();
 
-            Cliente = new Cliente()
-            {
-                Nome = "Alexandre Amorim"
-            };
         }
         public object Id { get; set; }
         public Guid PacienteGuid { get; set; }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace Showaspnetcore
 {
@@ -11,10 +12,14 @@ namespace Showaspnetcore
     {
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder().AddEnvironmentVariables("ASPNETCORE_").Build();
+
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://*:8082")
+                //.UseConfiguration(config)
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseWebRoot("wwwroot")
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
