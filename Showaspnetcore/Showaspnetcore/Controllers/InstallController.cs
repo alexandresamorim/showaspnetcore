@@ -5,10 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
-using Showaspnetcore.Data;
 using Showaspnetcore.Models;
-using Showaspnetcore.Models.Enums;
 
 namespace Showaspnetcore.Controllers
 {
@@ -16,8 +13,6 @@ namespace Showaspnetcore.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IMongoCollection<User> _userCollection;
-        private readonly IMongoCollection<Role> _roleCollection;
 
         private readonly ILogger _logger;
 

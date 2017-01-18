@@ -86,7 +86,7 @@ namespace Showaspnetcore
             app.UseSession();
             app.UseStaticFiles();
 
-            app.UseInstaller();
+            //app.UseInstaller();
 
             app.UseIdentity()
                .UseFacebookAuthentication(new FacebookOptions

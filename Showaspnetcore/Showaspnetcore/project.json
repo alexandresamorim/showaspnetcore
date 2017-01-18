@@ -21,7 +21,7 @@
     "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Google": "1.1.0",
     "Microsoft.AspNetCore.Authentication.Twitter": "1.1.0",
-    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "cloudscribe.Web.Pagination": "1.1.1"
   },
 
