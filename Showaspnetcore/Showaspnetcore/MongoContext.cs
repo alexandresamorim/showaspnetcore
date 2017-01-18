@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Driver;
+using Showaspnetcore.Data;
 using Showaspnetcore.Model;
 
 namespace Showaspnetcore

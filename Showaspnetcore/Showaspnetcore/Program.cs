@@ -12,8 +12,6 @@ namespace Showaspnetcore
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder().AddEnvironmentVariables("ASPNETCORE_").Build();
-
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls("http://*:8082")

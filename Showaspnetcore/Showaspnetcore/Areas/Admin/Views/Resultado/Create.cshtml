@@ -1,0 +1,83 @@
+﻿@using Showaspnetcore.Data
+@model Showaspnetcore.Data.ResultadoExame
+
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<form asp-controller="Resultado" asp-antiforgery="true" asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="clearfix">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Cadastro de Resultados <small></small></h2>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <hr />
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Paciente</label>
+                            <div class="col-md-10">
+                                <select asp-for="PacienteGuid"  class="form-control col-md-4" 
+                                        asp-items="@ViewBag.pacientesViewList">
+                                    <option>Selecione o paciente</option>
+                                </select>
+                                <span asp-validation-for="PacienteGuid" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Exame" class="control-label col-md-2"></label>
+                            <div class="col-md-10">
+                                <input type="text" asp-for="Exame" class="form-control" />
+                                <span asp-validation-for="Exame" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Email</label>
+                            <div class="col-md-10">
+                                <input type="text" asp-for="UsuarioId" class="form-control" />
+                                <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <input type="submit" value="Gravar" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        $('#fileupload')
+            .fileupload({
+                dataType: 'json',
+                url: '/Resultados/UploadFiles',
+                autoUpload: true,
+                done: function(e, data) {
+
+                    alert('entrou');
+
+                    $('.file_name').html(data.result.name);
+                    $('.file_type').html(data.result.type);
+                    $('.file_size').html(data.result.size);
+                }
+            })
+            .on('fileuploadprogressall',
+                function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('.progress .progress-bar').css('width', progress + '%');
+                });
+    });
+</script>

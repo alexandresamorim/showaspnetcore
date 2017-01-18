@@ -2,7 +2,7 @@
 
 namespace Showaspnetcore.Services
 {
-    public class MessageServices : IEmailSender, ISmsSender
+    public class AuthMessageSender : IEmailSender, ISmsSender
     {
         public Task SendEmailAsync(string email, string subject, string message)
         {

@@ -1,109 +1,253 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_LayoutMedical";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.png" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    <h3>Instituto de cardiologia veterinária</h3>
-                    
+<!-- Section: intro -->
+<section id="intro" class="intro">
+    <div class="intro-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="wow fadeInDown" data-wow-offset="0" data-wow-delay="0.1s">
+                        <h2 class="h-ultra">Icvet Cardiologia Veterinária</h2>
+                    </div>
+                    <div class="wow fadeInUp" data-wow-offset="0" data-wow-delay="0.1s">
+                        <h4 class="h-light">Fornecer a melhor qualidade de cuidados de saúde para seu pet.</h4>
+                    </div>
+                    <div class="well well-trans">
+                        <div class="wow fadeInRight" data-wow-delay="0.1s">
 
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.png" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Leia mais
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Bring in libraries from NuGet, Bower, and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Leia mais
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Leia mais
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Anterior</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Próximo</span>
-    </a>
-</div>
+                            <ul class="lead-list">
+                                <li><span class="fa fa-check fa-2x icon-success"></span> <span class="list"><strong>TOMOGRAFIA COMPUTADORIZADA para cães e Gatos </strong><br />LAUDOS EM ATÉ 72HS COM IMAGENS IMPRESSAS E EM CD<br />LAUDOS EMERGENCIAIS EM ATÉ 3 HORAS <br/>ANESTESIA INALATÓRIA ACOMPANHADA POR ANESTESISTA</span></li>
+                                <li><span class="fa fa-check fa-2x icon-success"></span> <span class="list"><strong>Stent Traqueal para correção de colapso de traqueia.</strong><br />Tratamento visa  excelente qualidade de vida!</span></li>
+                                <li><span class="fa fa-check fa-2x icon-success"></span> <span class="list"><strong>Only use friendly environment</strong><br />Lorem ipsum dolor sit amet, in verterem persecuti vix, sit te meis</span></li>
+                            </ul>
+                            <p class="text-right wow bounceIn" data-wow-delay="0.4s">
+                                <a href="#" class="btn btn-skin btn-lg">Learn more <i class="fa fa-angle-right"></i></a>
+                            </p>
+                        </div>
+                    </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Que somos</h2>
-        <ul>
-            <li>Instituto de cardiologia veterinária(ICVET) e o mais moderno e completo centro de diagnóstico e tratamento de doenças cardiovasculares
-                     de cães e gatos da américa latina.</li>
-            <li></li>
-            <li></li>
-        </ul>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.2s">
+                        <img src="~/theme/medical/img/dummy/img-1.png" class="img-responsive" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>Consulta / Avaliação</h2>
-        <ul>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkID=699562">Add an appsetting in config and access it in app.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699318">Add client packages using Bower.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
+</section>
+
+<!-- Section: boxes -->
+<section id="boxes" class="home-section paddingtop-80">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-check fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Make an appoinment</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-list-alt fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Choose your package</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+                        <i class="fa fa-user-md fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Help by specialist</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-hospital-o fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Get diagnostic report</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>Exames e procedimentos</h2>
-        <ul>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="http://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
+
+</section>
+<!-- /Section: boxes -->
+
+
+<!-- Section: boxes -->
+<section id="boxes" class="home-section paddingtop-80">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-check fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Make an appoinment</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-list-alt fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Choose your package</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+                        <i class="fa fa-user-md fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Help by specialist</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box text-center">
+
+                        <i class="fa fa-hospital-o fa-3x circled bg-skin"></i>
+                        <h4 class="h-bold">Get diagnostic report</h4>
+                        <p>
+                            Lorem ipsum dolor sit amet, nec te mollis utroque honestatis, ut utamur molestiae vix, graecis eligendi ne.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>Procedimentos exclusivos</h2>
-        <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>2</li>
-        </ul>
+
+</section>
+<!-- /Section: boxes -->
+
+<!-- Section: services -->
+<section id="service" class="home-section nopadding paddingtop-60">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <img src="~/theme/medical/img/dummy/img-1.jpg" class="img-responsive" alt="" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3">
+
+                <div class="wow fadeInRight" data-wow-delay="0.1s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-stethoscope fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Medical checkup</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-wheelchair fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Nursing Services</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="wow fadeInRight" data-wow-delay="0.3s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-plus-square fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Pharmacy</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-3 col-md-3">
+
+                <div class="wow fadeInRight" data-wow-delay="0.1s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-h-square fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Gyn Care</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wow fadeInRight" data-wow-delay="0.2s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-filter fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Neurology</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="wow fadeInRight" data-wow-delay="0.3s">
+                    <div class="service-box">
+                        <div class="service-icon">
+                            <span class="fa fa-user-md fa-3x"></span>
+                        </div>
+                        <div class="service-desc">
+                            <h5 class="h-light">Sleep Center</h5>
+                            <p>Vestibulum tincidunt enim in pharetra malesuada.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-</div>
+</section>
+<!-- /Section: services -->

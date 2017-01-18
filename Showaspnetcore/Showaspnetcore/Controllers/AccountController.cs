@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -15,23 +15,23 @@ namespace Showaspnetcore.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<MongoIdentityUser> _userManager;
-        private readonly SignInManager<MongoIdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<MongoIdentityUser> userManager,
-            SignInManager<MongoIdentityUser> signInManager,
-            //IEmailSender emailSender,
-            //ISmsSender smsSender,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            IEmailSender emailSender,
+            ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-           // _emailSender = emailSender;
-           // _smsSender = smsSender;
+            _emailSender = emailSender;
+            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
@@ -103,7 +103,7 @@ namespace Showaspnetcore.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new MongoIdentityUser(model.Email, model.Email);
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -208,7 +208,7 @@ namespace Showaspnetcore.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new MongoIdentityUser(model.Email, model.Email);
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -229,6 +229,11 @@ namespace Showaspnetcore.Controllers
 
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View("AccessDenied");
         }
 
         // GET: /Account/ConfirmEmail
@@ -451,7 +456,7 @@ namespace Showaspnetcore.Controllers
             }
         }
 
-        private Task<MongoIdentityUser> GetCurrentUserAsync()
+        private Task<IdentityUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }

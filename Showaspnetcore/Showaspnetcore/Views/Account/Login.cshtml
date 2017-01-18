@@ -1,7 +1,8 @@
-@using AspNetCore.Identity.MongoDB
+@using System.Threading.Tasks
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.MongoDB
 @model Showaspnetcore.Model.AccountViewModels.LoginViewModel
-@inject SignInManager<MongoIdentityUser> SignInManager
+@inject SignInManager<IdentityUser> SignInManager
 
 @{
     ViewData["Title"] = "Log in";

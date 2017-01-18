@@ -1,7 +1,8 @@
-﻿@model Showaspnetcore.Model.ResultadoExame
+﻿@using Showaspnetcore.Data
+@model Showaspnetcore.Data.ResultadoExame
 
 @{
-    Layout = "_Layout";
+    Layout = "_LayoutMedical";
 }
 
 <form asp-controller="Resultados" asp-antiforgery="true" asp-action="Create" enctype="multipart/form-data" method="post">

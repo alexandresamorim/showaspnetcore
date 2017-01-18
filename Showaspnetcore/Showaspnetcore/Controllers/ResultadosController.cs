@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Net.Http.Headers;
 using MongoDB.Driver;
+using Showaspnetcore.Data;
 using Showaspnetcore.Model;
 
 
@@ -24,11 +25,12 @@ namespace Showaspnetcore.Controllers
     {
         private readonly IMongoCollection<ResultadoExame> resultadoCollection;
         private readonly IMongoCollection<Paciente> pacienteCollection;
-        private UserManager<MongoIdentityUser> _userManager;
+        private UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<Role> _roleManager;
 
         private IHostingEnvironment _env;
 
-        public ResultadosController(MongoClient client, UserManager<MongoIdentityUser> userManager,
+        public ResultadosController(MongoClient client, UserManager<IdentityUser> userManager,
             IHostingEnvironment env)
         {
             _userManager = userManager;
@@ -41,7 +43,7 @@ namespace Showaspnetcore.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            var usuarioId = _userManager.GetUserId(User);
+            var usuarioId = _userManager.GetUserName(User);
 
             var filter = Builders<ResultadoExame>.Filter.Regex("UsuarioId", usuarioId);
             var resultados = resultadoCollection.Find(filter).ToList();
@@ -74,24 +76,6 @@ namespace Showaspnetcore.Controllers
             return View(Edit(person.ResultadoExameGuid));
         }
 
-        public async void UploadMultiple(ICollection<IFormFile> files)
-        {
-            string uploads = Path.Combine("Data", "Imagens");
-
-
-            string posts = Path.Combine("Data", "Posts");
-            var _files = Directory.EnumerateFiles(posts);
-
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    await file.SaveAsAsync(Path.Combine(uploads, fileName));
-                }
-            }
-        }
-
         [HttpGet]
         public ActionResult Download(Guid imagemGuid, Guid resultadoGuid)
         {
@@ -100,7 +84,7 @@ namespace Showaspnetcore.Controllers
 
             var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
 
-            var pathFull = GetPathAndFilename(imagem.Local);
+            var pathFull = GetPathAndFilename(imagem.FileName, resultadoGuid.ToString());
 
             HttpContext.Response.ContentType = imagem.Formato;
             FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(pathFull), imagem.Formato)
@@ -109,47 +93,6 @@ namespace Showaspnetcore.Controllers
             };
 
             return result;
-            /*
-            FileStream stream = new FileStream(pathFull, FileMode.Open);
-            //byte[] fileBytes = System.IO.File.ReadAllBytes(pathFull);
-            return File(stream, "application/pdf", pathFull);*/
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> UploadFiles(IList<IFormFile> files, ResultadoExame resultado)
-        {
-            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
-            var exame = resultadoCollection.Find(filter).FirstOrDefault();
-            var descricao = Request.Form["txtDescricao"].ToString();
-
-            foreach (IFormFile file in files)
-            {
-                string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-
-                filename = this.EnsureCorrectFilename(filename);
-
-                var pathInc = this.GetPathAndFilename(filename);
-
-                using (FileStream output = System.IO.File.Create(pathInc))
-                    file.CopyTo(output);
-
-                exame.Imagens.Add(new Imagem()
-                {
-                    ResultadoExameGuid = resultado.ResultadoExameGuid,
-                    Descricao = descricao,
-                    Local = filename,
-                    Length = file.Length,
-                    Formato = file.ContentType
-                });
-
-                var filterUpdate = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
-                var update = Builders<ResultadoExame>.Update
-                    .Set("Imagens", exame.Imagens);
-
-                var result = resultadoCollection.UpdateOneAsync(filterUpdate, update);
-
-            }
-            return RedirectToAction("Edit", new {resultadoGuid = resultado.ResultadoExameGuid});
         }
 
         private string EnsureCorrectFilename(string filename)
@@ -160,9 +103,9 @@ namespace Showaspnetcore.Controllers
             return filename;
         }
 
-        private string GetPathAndFilename(string filename)
+        private string GetPathAndFilename(string filename, string pathUser)
         {
-            return _env.WebRootPath + "\\exames\\" + filename;
+            return _env.WebRootPath + "\\exames\\" + pathUser + "\\" + filename;
         }
 
         public IActionResult Edit(Guid resultadoGuid)
@@ -174,41 +117,5 @@ namespace Showaspnetcore.Controllers
             return View(resultado);
         }
 
-        public IActionResult DeleteFile(Guid imagemGuid, Guid resultadoGuid)
-        {
-            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
-
-            var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
-
-            resultado.Imagens.Remove(imagem);
-
-
-            var filterUpdate = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
-            var update = Builders<ResultadoExame>.Update
-                .Set("Imagens", resultado.Imagens);
-
-            resultadoCollection.UpdateOneAsync(filterUpdate, update);
-
-            var pathFull = GetPathAndFilename(imagem.Local);
-            if (System.IO.File.Exists(pathFull))
-                System.IO.File.Delete(pathFull);
-
-            TempData["NossoErro"] = "Arquivo excluido com sucesso";
-
-
-            return RedirectToAction("Edit", new {resultadoGuid = resultado.ResultadoExameGuid});
-        }
-
-        public IActionResult AlterarDescricao(Guid imagemGuid, Guid resultadoExameGuid, string descricao)
-        {
-            var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoExameGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
-            var imagemResult = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
-
-            imagemResult.Descricao = descricao;
-
-            return RedirectToAction("Edit", new { resultadoGuid = resultadoExameGuid });
-        }
     }
 }

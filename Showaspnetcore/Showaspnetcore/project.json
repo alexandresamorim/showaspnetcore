@@ -1,8 +1,8 @@
 {
+  "userSecretsId": "aspnet-Showaspnetcore-98dc9ad7-0e02-4a59-8cb9-dbe0069b996f",
   "dependencies": {
     "MongoDB.Driver": "2.4.1",
     "BundlerMinifier.Core": "2.2.306",
-    "Microsoft.ApplicationInsights.AspNetCore": "1.0.2",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.AspNetCore.Routing": "1.1.0",
@@ -16,14 +16,16 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
-    "AspNetCore.Identity.MongoDB": "1.0.0-rc2-2",
-    "Microsoft.AspNetCore.Authentication.Facebook": "1.0.0",
-    "Microsoft.AspNetCore.Authentication.Google": "1.0.0",
-    "Microsoft.AspNetCore.Authentication.Twitter": "1.0.0",
-    "Microsoft.AspNetCore.Session": "1.0.0"
+    "Microsoft.AspNetCore.Identity.MongoDB": "1.0.2",
+    "Microsoft.AspNetCore.Session": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.Facebook": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.Google": "1.1.0",
+    "Microsoft.AspNetCore.Authentication.Twitter": "1.1.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "cloudscribe.Web.Pagination": "1.1.1"
   },
 
-  "tools": { 
+  "tools": {
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
   },
@@ -36,8 +38,8 @@
   "frameworks": {
     "netcoreapp1.1": {
       "imports": [
-        "dotnet5.6", 
-        "portable-net45+win8" 
+        "dotnet5.6",
+        "portable-net45+win8"
       ]
     }
   },
@@ -56,6 +58,9 @@
   "publishOptions": {
     "include": [
       "wwwroot",
+      "Views",
+      "Areas/**/Views",
+      "Areas/Admin/Views",
       "**/*.cshtml",
       "appsettings.json",
       "web.config"

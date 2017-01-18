@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Paciente>
+
+@{
+    Layout = "_LayoutAdmin";
+    int PageNumber = (int)ViewData["PageNumber"];
+    int PageSize = (int)ViewData["PageSize"];
+    int TotalItemCount = int.Parse(ViewData["TotalItemCount"].ToString());
+}
+
+<div class="panel mb25">
+    <div class="panel-heading">
+        <span>Pacientes</span>
+        <span class="pull-right">
+            <a asp-action="Create">Criar novo</a>
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!-- box (Contas Receber) -->
+                <div class="x_panel">
+                    <form asp-action="Index" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                        <p>
+                            Title: @Html.TextBox("pesquisa")
+                            <input type="submit" value="Filter" />
+                        </p>
+                    </form>
+                    <div class="table-responsive">
+                        <table id="example1" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Paciênte</th>
+                                    <th>Cliente</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Proprietario</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="project-actions">
+                                            <a asp-controller="Pacientes" asp-action="Detail" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a asp-controller="Pacientes" asp-action="Delete" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Deletar </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div><!-- /.box-body -->
+                    <cs-pager cs-paging-pagesize="@PageSize"
+                              cs-paging-pagenumber="@PageNumber"
+                              cs-paging-totalitems="@TotalItemCount"
+                              cs-pagenumber-param="page"
+                              asp-controller="Pacientes"
+                              asp-action="Index"></cs-pager>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section NavBarText {
+    <text>Pacientes</text>
+}
+@section Breadcrumbs {
+    <ol class="breadcrumb">
+        <li>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        <li class="active ng-binding">
+            <a href="javascript:;">Pacientes</a>
+        </li>
+    </ol>
+}
+@section Scripts {
+    <script type="text/javascript">
+        $("[data-toggle=tooltip]").tooltip();
+    </script>
+}

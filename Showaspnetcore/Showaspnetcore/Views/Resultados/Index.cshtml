@@ -1,58 +1,42 @@
-﻿@model ICollection<Showaspnetcore.Model.ResultadoExame>
+﻿@using Showaspnetcore.Data
+@model ICollection<Showaspnetcore.Data.ResultadoExame>
 
 @{
-    Layout = "_Layout";
+    Layout = "_LayoutMedical";
 }
 
 <br />
 
-<section class="content-header">
-
-    <ol class="breadcrumb">
-        <li><a asp-controller="Pacientes" asp-action="Index"><i class="fa fa-dashboard"></i> Inicio</a></li>
-        <li class="active">Resultados</li>
-        <li class="pull-right"><a asp-controller="Resultados" asp-action="Create"><i class="fa fa-plus-circle "></i> Novo</a></li>
-    </ol>
-</section>
-
-<div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-        <!-- box (Contas Receber) -->
-        <div class="x_panel">
-            <form asp-action="Index" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-                <p>
-                    Title: @Html.TextBox("pesquisa")
-                    <input type="submit" value="Filter" />
-                </p>
-            </form>
-            <div class="box-body">
-                <table id="example1" class="table table-striped">
+<section id="resultado" class="intro">
+    <div class="intro-resultado">
+        <div class="container">
+            <div class="row">
+                <table class="table table-striped">
                     <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Paciênte</th>
-                        <th>Exame</th>
-                        <th></th>
-                        <th class="text-right"></th>
-                    </tr>
+                        <tr>
+                            <th>Data</th>
+                            <th>Paciênte</th>
+                            <th>Exame</th>
+                            <th></th>
+                            <th class="text-right"></th>
+                        </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in @Model)
-                    {
-                        <tr>
-                            <td>@item.Data.ToString("dd-MM-yyyy")</td>
-                            <td>@item.Paciente.Name</td>
-                            <td>@item.Exame</td>
-                            <td></td>
-                            <td class="project-actions">
-                                <a asp-controller="Resultados" asp-action="Edit" asp-route-resultadoGuid=@item.ResultadoExameGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
-                            </td>
-                        </tr>
-                    }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Data.ToString("dd-MM-yyyy")</td>
+                                <td>@item.Paciente.Name</td>
+                                <td>@item.Exame</td>
+                                <td></td>
+                                <td>
+                                    <a asp-controller="Resultados" asp-action="Edit" asp-route-resultadoGuid=@item.ResultadoExameGuid class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
-            </div><!-- /.box-body -->
+            </div>
         </div>
     </div>
-</div>
+</section>

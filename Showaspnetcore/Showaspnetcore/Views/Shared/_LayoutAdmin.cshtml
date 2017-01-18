@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Resultado Fácil</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        
+        
+
+    </environment>
+    
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- page level plugin styles -->
+    <!-- /page level plugin styles -->
+    <!-- build:css({.tmp,app}) styles/app.min.css -->
+    <link rel="stylesheet" href="~/vendor/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="~/vendor/perfect-scrollbar/css/perfect-scrollbar.css">
+    <link rel="stylesheet" href="~/styles/roboto.css">
+    <link rel="stylesheet" href="~/styles/font-awesome.css">
+    <link rel="stylesheet" href="~/styles/panel.css">
+    <link rel="stylesheet" href="~/styles/feather.css">
+    <link rel="stylesheet" href="~/styles/animate.css">
+    <link rel="stylesheet" href="~/styles/urban.css">
+    <link rel="stylesheet" href="~/styles/urban.skins.css">
+    @RenderSection("styles", required: false)
+
+</head>
+<body>
+<div class="app layout-fixed-header">
+    <!-- sidebar panel -->
+    <div class="sidebar-panel offscreen-left">
+        <div class="brand">
+            <!-- logo -->
+            <div class="brand-logo">
+                <a asp-action="Index" asp-controller="Home"><img src="~/images/sugestao.JPG" height="15" alt=""></a>
+            </div>
+            <!-- /logo -->
+            <!-- toggle small sidebar menu -->
+            <a href="javascript:;" class="toggle-sidebar hidden-xs hamburger-icon v3" data-toggle="layout-small-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+            <!-- /toggle small sidebar menu -->
+        </div>
+        <!-- main navigation -->
+        <nav role="navigation">
+            <ul class="nav">
+                <!-- dashboard -->
+                <li>
+                    <a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-dashboard"></i><span>Principal</span></a>
+                </li>
+                <!-- /dashboard -->
+                <!-- bookings -->
+                <li>
+                    <a asp-area="Admin" asp-controller="Pacientes" asp-action="Index"><i class="fa fa-table"></i><span>Pacientes</span></a>
+                </li>
+                <!-- /bookings -->
+                <!-- customers -->
+                <li>
+                    <a asp-area="Admin" asp-controller="Resultado" asp-action="Index"><i class="fa fa-users"></i><span>Resultados</span></a>
+                </li>
+                <!-- /customers -->
+                <!-- administration -->
+                <li>
+                    <a href="javascript:;"><i class="fa fa-wrench"></i><span>Administration</span></a>
+                    <ul class="sub-menu">
+                        <li><a asp-controller="Locations" asp-action="Index">Locations</a></li>
+                        <li><a asp-controller="Users" asp-action="Index">Usuarios</a></li>
+                    </ul>
+                </li>
+                <!-- /administration -->
+                <!-- settings -->
+                <li>
+                    <a href="javascript:;"><i class="fa fa-cogs"></i><span>Settings</span></a>
+                    <ul class="sub-menu">
+                        <li><a asp-controller="Settings" asp-action="Index"><span>General</span></a></li>
+                        <li><a asp-controller="Services" asp-action="Index"><span>Services</span></a></li>
+                        <li><a asp-controller="PaymentMethods" asp-action="Index"><span>Payment Methods</span></a></li>
+                        <li><a asp-controller="PackageTypes" asp-action="Index"><span>Package Types</span></a></li>
+                        <li><a asp-controller="Roles" asp-action="Index"><span>Roles &amp; Permissions</span></a></li>
+                    </ul>
+                </li>
+                <!-- /settings -->
+            </ul>
+        </nav>
+        <!-- /main navigation -->
+    </div>
+    <!-- /sidebar panel -->
+    <!-- content panel -->
+    <div class="main-panel">
+        <!-- top header -->
+        <header class="header navbar">
+            <div class="brand visible-xs">
+                <!-- toggle offscreen menu -->
+                <div class="toggle-offscreen">
+                    <a href="#" class="hamburger-icon visible-xs" data-toggle="offscreen" data-move="ltr">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                </div>
+                <!-- /toggle offscreen menu -->
+                <!-- logo -->
+                <div class="brand-logo">
+                    <img src="~/images/sugestao.JPG" height="15" alt="">
+                </div>
+                <!-- /logo -->
+            </div>
+            @if (IsSectionDefined("NavBarText"))
+            {
+                <ul class="nav navbar-nav hidden-xs">
+                    <li>
+                        <p class="navbar-text">
+                            @RenderSection("NavBarText")
+                        </p>
+                    </li>
+                </ul>
+            }
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+                <li>
+                    <a href="javascript:;" data-toggle="dropdown">
+                        <i class="fa fa-user"></i>
+                        <span>@User.Identity.Name</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Manage" asp-action="ChangePassword">Change Password</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Account" asp-action="LogOff">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </header>
+        <!-- /top header -->
+        <!-- main area -->
+        <!-- main area -->
+        <div class="main-content">
+            @if (IsSectionDefined("Breadcrumbs"))
+            {
+                RenderSection("Breadcrumbs");
+            }
+            @RenderBody()
+        </div>
+        <!-- /main area -->
+    </div>
+    <!-- /content panel -->
+    <!-- bottom footer -->
+    <footer class="content-footer">
+        <nav class="footer-right">
+            <ul class="nav">
+                <li>
+                    <a href="javascript:;" class="scroll-up">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <nav class="footer-left">
+            <ul class="nav">
+                <li>
+                    <a href="javascript:;">Copyright <i class="fa fa-copyright"></i> <span>Rasen Soluções </span> 2015. Todos os direitos reservados.</a>
+                </li>
+            </ul>
+        </nav>
+    </footer>
+</div>
+    
+    <!-- build:js({.tmp,app}) scripts/app.min.js -->
+    <script src="~/scripts/extentions/modernizr.js"></script>
+    <script src="~/vendor/jquery/dist/jquery.js"></script>
+    <script src="~/vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/vendor/jquery.easing/jquery.easing.js"></script>
+    <script src="~/vendor/fastclick/lib/fastclick.js"></script>
+    <script src="~/vendor/onScreen/jquery.onscreen.js"></script>
+    <script src="~/vendor/jquery-countTo/jquery.countTo.js"></script>
+    <script src="~/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+    <script src="~/scripts/ui/accordion.js"></script>
+    <script src="~/scripts/ui/animate.js"></script>
+    <script src="~/scripts/ui/link-transition.js"></script>
+    <script src="~/scripts/ui/panel-controls.js"></script>
+    <script src="~/scripts/ui/preloader.js"></script>
+    <script src="~/scripts/ui/toggle.js"></script>
+    <script src="~/scripts/urban-constants.js"></script>
+    <script src="~/scripts/extentions/lib.js"></script>
+    <!-- endbuild -->
+<environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
