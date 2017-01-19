@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Showaspnetcore.Models;
 
 namespace Showaspnetcore.Controllers
@@ -24,13 +26,14 @@ namespace Showaspnetcore.Controllers
             }
         }
 
+        private readonly MongoClient _client;
         public InstallController(
-            //ApplicationDbContext context,
+            MongoClient client,
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILoggerFactory loggerFactory)
         {
-            //_context = context;
+            _client = client;
             _userManager = userManager;
             _roleManager = roleManager;
             _logger = loggerFactory.CreateLogger<InstallController>();
@@ -38,7 +41,17 @@ namespace Showaspnetcore.Controllers
 
         public IActionResult Index()
         {
- 
+
+            var dbContext = _client.GetDatabase("resultadofacildb");
+            var userCollection = dbContext.GetCollection<IdentityUser>("users");
+
+            var filter = new BsonDocument();
+            var users = userCollection.Find(filter).ToList();
+
+            if (users.Count > 0)
+                return RedirectToAction("~/Home/Index");
+
+
             return View();
         }
 

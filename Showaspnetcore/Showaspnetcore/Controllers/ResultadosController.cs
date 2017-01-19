@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.MongoDB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Net.Http.Headers;
 using MongoDB.Driver;
 using Showaspnetcore.Data;
-using Showaspnetcore.Model;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -77,7 +72,7 @@ namespace Showaspnetcore.Controllers
         }
 
         [HttpGet]
-        public ActionResult Download(Guid imagemGuid, Guid resultadoGuid)
+        public virtual  FileResult Download(Guid imagemGuid, Guid resultadoGuid)
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
             var resultado = resultadoCollection.Find(filter).FirstOrDefault();
@@ -86,13 +81,16 @@ namespace Showaspnetcore.Controllers
 
             var pathFull = GetPathAndFilename(imagem.FileName, resultadoGuid.ToString());
 
-            HttpContext.Response.ContentType = imagem.Formato;
+            return File(imagem.Local, imagem.Formato, imagem.FileName);
+
+            /*
             FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(pathFull), imagem.Formato)
             {
-                FileDownloadName = imagem.Local
+                FileDownloadName = imagem.FileName
             };
 
             return result;
+            */
         }
 
         private string EnsureCorrectFilename(string filename)

@@ -140,7 +140,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
                 {
                     ResultadoExameGuid = resultado.ResultadoExameGuid,
                     Descricao = descricao,
-                    Local = "~/exames/" + resultado.ResultadoExameGuid + filename,
+                    Local = "/exames/" + resultado.ResultadoExameGuid +"/"+ filename,
                     FileName = filename,
                     Length = file.Length,
                     Formato = file.ContentType

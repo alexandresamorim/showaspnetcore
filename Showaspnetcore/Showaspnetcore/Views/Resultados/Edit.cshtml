@@ -39,11 +39,13 @@
                                                 
                                                 <td>@image.Descricao</td>
                                                 <td>@((image.Length / 1024).ToString("N2")) KB</td>
+                                                <td></td>
                                                 <td class="project-actions">
+                                                    <a href="@image.Local" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-check-circle"></i> Visualizar</a>
                                                     <a asp-controller="Resultados" asp-action="Download"
                                                        asp-route-imagemGuid="@image.ImagemGuid"
                                                        asp-route-resultadoGuid="@image.ResultadoExameGuid"
-                                                       class="btn btn-primary btn-sm"><i class="fa fa-folder"></i>Visualizar</a>
+                                                       class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Salvar</a>
                                                 </td>
                                             </tr>
                                         }
