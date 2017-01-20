@@ -1,5 +1,4 @@
-﻿@using Showaspnetcore.Data
-@model ICollection<Showaspnetcore.Data.ResultadoExame>
+﻿@model ICollection<ResultadoExame>
 
 @{
     Layout = "_LayoutMedical";
@@ -11,29 +10,36 @@
     <div class="intro-resultado">
         <div class="container">
             <div class="row">
+                <div class="x_title">
+                    <h4>
+                        Olá, @ViewBag.Responsavel <small></small>
+                    </h4>
+                    <div class="clearfix"></div>
+                </div>
+
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Paciênte</th>
-                            <th>Exame</th>
-                            <th></th>
-                            <th class="text-right"></th>
-                        </tr>
+                    <tr>
+                        <th>Data</th>
+                        <th>Paciênte</th>
+                        <th>Exame</th>
+                        <th></th>
+                        <th class="text-right"></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.Data.ToString("dd-MM-yyyy")</td>
-                                <td>@item.Paciente.Name</td>
-                                <td>@item.Exame</td>
-                                <td></td>
-                                <td>
-                                    <a asp-controller="Resultados" asp-action="Edit" asp-route-resultadoGuid=@item.ResultadoExameGuid class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
-                                </td>
-                            </tr>
-                        }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Data.ToString("dd-MM-yyyy")</td>
+                            <td>@item.Paciente.Name</td>
+                            <td>@item.Exame</td>
+                            <td></td>
+                            <td>
+                                <a asp-controller="Resultados" asp-action="Edit" asp-route-resultadoGuid=@item.ResultadoExameGuid class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>

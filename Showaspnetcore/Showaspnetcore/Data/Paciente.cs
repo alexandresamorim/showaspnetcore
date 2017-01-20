@@ -1,4 +1,5 @@
 ﻿using System;
+using MongoDB.Bson;
 
 namespace Showaspnetcore.Data
 {
@@ -7,13 +8,14 @@ namespace Showaspnetcore.Data
         public Paciente()
         {
             PacienteGuid = Guid.NewGuid();
-
+            DataCadastro = DateTime.Now;
         }
-        public object Id { get; set; }
+        public ObjectId Id { get; set; }
         public Guid PacienteGuid { get; set; }
         public string Name { get; set; }
-        public Cliente Cliente { get; set; }
-        public string Proprietario { get; set; }
+        public string Email { get; set; }
+        public string ChaveAcesso { get; set; }
+        public string Responsavel { get; set; }
         public DateTime DataCadastro { get; set; }
     }
 }

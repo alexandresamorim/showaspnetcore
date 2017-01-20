@@ -70,7 +70,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
             var filterPaciente = Builders<Paciente>.Filter.Eq("PacienteGuid", person.PacienteGuid);
             person.Paciente = pacienteCollection.Find(filterPaciente).FirstOrDefault();
 
-            person.UsuarioId = _userManager.GetUserId(User);
+            person.UsuarioId = _userManager.GetUserName(User);
             
             await resultadoCollection.InsertOneAsync(person);
             return RedirectToAction("Edit", new { resultadoGuid = person.ResultadoExameGuid });
@@ -116,11 +116,12 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> UploadFiles(IList<IFormFile> files, ResultadoExame resultado)
         {
+            var fals = Request.Form.Files;
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
             var exame = resultadoCollection.Find(filter).FirstOrDefault();
             var descricao = Request.Form["txtDescricao"].ToString();
 
-            foreach (IFormFile file in files)
+            foreach (IFormFile file in fals)
             {
                 string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
 

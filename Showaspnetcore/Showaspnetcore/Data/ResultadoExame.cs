@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MongoDB.Bson;
+using Showaspnetcore.Models.Enums;
 
 namespace Showaspnetcore.Data
 {
@@ -21,6 +22,8 @@ namespace Showaspnetcore.Data
         public DateTime Data { get; set; }
         public Guid PacienteGuid { get; set; }
         public Paciente Paciente { get; set; }
+        public DateTime DataPrevista { get; set; }
+        public ResultadoStatusEnumView Status { get; set; }
         public ICollection<Imagem> Imagens { get; set; }
     }
 }

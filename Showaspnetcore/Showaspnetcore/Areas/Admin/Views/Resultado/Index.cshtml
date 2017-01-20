@@ -2,19 +2,8 @@
 @model ICollection<Showaspnetcore.Data.ResultadoExame>
 
 @{
-    Layout = "_LayoutAdmin";
+    Layout = "_LayoutNice";
 }
-
-<br />
-
-<section class="content-header">
-
-    <ol class="breadcrumb">
-        <li><a asp-controller="Pacientes" asp-action="Index"><i class="fa fa-dashboard"></i> Inicio</a></li>
-        <li class="active">Resultados</li>
-        <li class="pull-right"><a asp-area="Admin" asp-controller="Resultado" asp-action="Create"><i class="fa fa-plus-circle "></i> Novo</a></li>
-    </ol>
-</section>
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -28,7 +17,7 @@
                 </p>
             </form>
             <div class="box-body">
-                <table id="example1" class="table table-striped">
+                <table id="example1" class="table table-striped table-advance table-hover">
                     <thead>
                     <tr>
                         <th>Data</th>

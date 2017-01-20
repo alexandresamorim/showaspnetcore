@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MongoDB.Driver;
 using Showaspnetcore.Data;
+using Showaspnetcore.Model;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Showaspnetcore.Controllers
 {
-    [Authorize]
     public class ResultadosController : Controller
     {
         private readonly IMongoCollection<ResultadoExame> resultadoCollection;
@@ -34,13 +34,29 @@ namespace Showaspnetcore.Controllers
             pacienteCollection = database.GetCollection<Paciente>("Pacientes");
             _env = env;
         }
+        // GET: /<controller>/
+        public IActionResult Identificar()
+        {
+            return View();
+        }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(IndentificacaoViewModel model)
         {
-            var usuarioId = _userManager.GetUserName(User);
 
-            var filter = Builders<ResultadoExame>.Filter.Regex("UsuarioId", usuarioId);
+            var filterPaciente = Builders<Paciente>.Filter.Regex("ChaveAcesso", model.ChaveAcesso);
+            var paciente = pacienteCollection.Find(filterPaciente).FirstOrDefault();
+
+            if (paciente == null)
+            {
+                TempData["NossoErro"] = "Código de acesso inválido.";
+                return RedirectToAction("Identificar");
+            }
+
+
+            ViewBag.Responsavel = paciente.Responsavel;
+
+            var filter = Builders<ResultadoExame>.Filter.Eq("PacienteGuid", paciente.PacienteGuid);
             var resultados = resultadoCollection.Find(filter).ToList();
 
             return View(resultados);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -49,7 +50,9 @@ namespace Showaspnetcore.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            var paciente = new Paciente();
+            paciente.ChaveAcesso = AlfanumericoAleatorio(6);
+            return View(paciente);
         }
 
         // POST: People/Create
@@ -78,7 +81,7 @@ namespace Showaspnetcore.Controllers
             var filter = Builders<Paciente>.Filter.Eq("PacienteGuid", person.PacienteGuid);
             var update = Builders<Paciente>.Update
                 .Set("Name", person.Name)
-                .Set("Proprietario", person.Proprietario);
+                .Set("Proprietario", person.Responsavel);
 
             var result = await paciente.UpdateOneAsync(filter, update);
             if (result.ModifiedCount > 0)
@@ -134,6 +137,17 @@ namespace Showaspnetcore.Controllers
             var path = "";
             var stream = new FileStream(path, FileMode.Open);
             return File(stream, fileDescription);
+        }
+
+        public static string AlfanumericoAleatorio(int tamanho)
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var result = new string(
+                Enumerable.Repeat(chars, tamanho)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+            return result;
         }
     }
 }
