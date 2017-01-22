@@ -129,9 +129,11 @@ namespace Showaspnetcore.Areas.Admin.Controllers
 
                 var pathInc = this.GetPathAndFilename(filename, resultado.ResultadoExameGuid.ToString());
                 var pasta = GetPathFolter(resultado.ResultadoExameGuid.ToString());
-                if (!Directory.Exists(pasta))
+                var local = "/exames/" + resultado.ResultadoExameGuid + "/" + filename;
+
+                if (!Directory.Exists(local))
                 {
-                    Directory.CreateDirectory(pasta);
+                    Directory.CreateDirectory(local);
                 }
 
                 using (FileStream output = System.IO.File.Create(pathInc))
@@ -141,7 +143,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
                 {
                     ResultadoExameGuid = resultado.ResultadoExameGuid,
                     Descricao = descricao,
-                    Local = "/exames/" + resultado.ResultadoExameGuid +"/"+ filename,
+                    Local = local,
                     FileName = filename,
                     Length = file.Length,
                     Formato = file.ContentType
