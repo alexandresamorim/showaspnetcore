@@ -30,7 +30,10 @@
                                 <div class="form-group">
                                     <label asp-for="Exame" class="control-label col-md-2"></label>
                                     <div class="col-md-10">
-                                        <input type="text" asp-for="Exame" class="form-control" />
+                                        <select asp-for="Exame" class="form-control col-md-4"
+                                                asp-items="@ViewBag.examesViewList">
+                                            <option>Selecione o exame</option>
+                                        </select>
                                         <span asp-validation-for="Exame" class="text-danger"></span>
                                     </div>
                                 </div>

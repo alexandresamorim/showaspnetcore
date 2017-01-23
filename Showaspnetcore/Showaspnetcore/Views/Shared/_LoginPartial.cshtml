@@ -7,42 +7,32 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <span class="profile-ava">
-                    <img alt="" src="~/theme/niceadmin/img/avatar1_small.jpg">
-                </span>
-                <span class="username">@User.Identity.Name</span>
-                <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu extended logout">
-                <div class="log-arrow-up"></div>
-                <li class="eborder-top">
-                    <a href="#"><i class="icon_profile"></i> My Profile</a>
-                </li>
-                <li>
-                    <a href="#"><i class="icon_mail_alt"></i> My Inbox</a>
-                </li>
-                <li>
-                    <a href="#"><i class="icon_clock_alt"></i> Timeline</a>
-                </li>
-                <li>
-                    <a href="#"><i class="icon_chat_alt"></i> Chats</a>
-                </li>
-                <li>
-                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Sair</button>
-                </li>
-                <li>
-                    <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
-                </li>
-                <li>
-                    <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
-                </li>
-            </ul>
-        </li>
-        
-        
-      
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <span class="profile-ava">
+                <img alt="" src="~/theme/niceadmin/img/user.jpg">
+            </span>
+            <span class="username">@User.Identity.Name</span>
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu extended logout">
+
+            <li class="eborder-top">
+                <a href="#"><i class="icon_profile"></i> My Profile</a>
+            </li>
+            <li>
+                <a href="#"><i class="icon_mail_alt"></i> My Inbox</a>
+            </li>
+            <li>
+                <a href="#"><i class="icon_clock_alt"></i> Timeline</a>
+            </li>
+            <li>
+                <a href="#"><i class="icon_chat_alt"></i> Chats</a>
+            </li>
+            <li>
+                <a href="#" id="logoutLink"><i class="icon_key_alt"></i> Sair</a>
+
+            </li>
+        </ul>
     </form>
 }
 else
@@ -52,3 +42,13 @@ else
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Entrar</a></li>
     </ul>
 }
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        document.getElementById("logoutLink").onclick = function () {
+            document.getElementById("logoutForm").submit();
+            return false; // cancel the actual link
+        }
+    }
+</script>

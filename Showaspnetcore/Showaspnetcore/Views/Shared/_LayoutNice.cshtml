@@ -29,7 +29,7 @@
             </div>
 
             <!--logo start-->
-            <a asp-area="Admin" asp-controller="Resultado" asp-action="Index" class="logo">Resultado <span class="lite">Admin</span></a>
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="logo">Resultado <span class="lite">Admin</span></a>
             <!--logo end-->
 
             <div class="nav search-row" id="top_menu">
@@ -245,7 +245,9 @@
                     </li>
                     <!-- alert notification end-->
                     <!-- user login dropdown start-->
-                    @await Html.PartialAsync("_LoginPartial")
+                    <li class="dropdown">
+                        @await Html.PartialAsync("_LoginPartial")
+                    </li>
                     <!-- user login dropdown end -->
                 </ul>
                 <!-- notificatoin dropdown end-->
@@ -258,7 +260,7 @@
                 <!-- sidebar menu start-->
                 <ul class="sidebar-menu">
                     <li class="active">
-                        <a class="" href="index.html">
+                        <a class="" asp-area="Admin" asp-controller="Home" asp-action="Index">
                             <i class="icon_house_alt"></i>
                             <span>Dashboard</span>
                         </a>
@@ -270,8 +272,8 @@
                             <span class="menu-arrow arrow_carrot-right"></span>
                         </a>
                         <ul class="sub">
-                            <li><a asp-controller="Pacientes" asp-action="Index">Paciente</a></li>
-                            <li><a class="" href="form_validation.html">Exames</a></li>
+                            <li><a asp-area="Admin" asp-controller="Pacientes" asp-action="Index">Paciente</a></li>
+                            <li><a asp-area="Admin" asp-controller="Exames" asp-action="Index">Exames</a></li>
                         </ul>
                     </li>
                     <li class="sub-menu">
@@ -319,10 +321,10 @@
     <!-- custom form validation script for this page-->
     <script src="~/theme/niceadmin/js/form-validation-script.js"></script>
     <!--custome script for all page-->
-<script src="~/theme/niceadmin/js/scripts.js"></script>
-    
+    <script src="~/theme/niceadmin/js/scripts.js"></script>
 
 
-@RenderSection("scripts", required: false)
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

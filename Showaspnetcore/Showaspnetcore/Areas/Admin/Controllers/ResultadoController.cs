@@ -23,20 +23,22 @@ namespace Showaspnetcore.Areas.Admin.Controllers
     [Authorize]
     public class ResultadoController : Controller
     {
-        private readonly IMongoCollection<ResultadoExame> resultadoCollection;
-        private readonly IMongoCollection<Paciente> pacienteCollection;
-        private UserManager<IdentityUser> _userManager;
-
-        private IHostingEnvironment _env;
+        private readonly IMongoCollection<ResultadoExame> _resultadoCollection;
+        private readonly IMongoCollection<Paciente> _pacienteCollection;
+        private readonly IMongoCollection<Exame> _examesCollection;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHostingEnvironment _environment;
 
         public ResultadoController(MongoClient client, UserManager<IdentityUser> userManager,
             IHostingEnvironment env)
         {
             _userManager = userManager;
             var database = client.GetDatabase("resultadofacildb");
-            resultadoCollection = database.GetCollection<ResultadoExame>("ResultadoExames");
-            pacienteCollection = database.GetCollection<Paciente>("Pacientes");
-            _env = env;
+            _resultadoCollection = database.GetCollection<ResultadoExame>("ResultadoExames");
+            _pacienteCollection = database.GetCollection<Paciente>("Pacientes");
+            _examesCollection = database.GetCollection<Exame>("Exames");
+
+            _environment = env;
         }
 
         // GET: /<controller>/
@@ -46,7 +48,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
             var usuarioId = _userManager.GetUserName(User);
 
             var filter = Builders<ResultadoExame>.Filter.Regex("UsuarioId", usuarioId);
-            var resultados = resultadoCollection.Find(filter).ToList();
+            var resultados = _resultadoCollection.Find(filter).ToList();
 
             return View(resultados);
         }
@@ -55,10 +57,17 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         {
             var filterPaciente = Builders<Paciente>.Filter.Regex("Name", "//");
             ViewBag.pacientesViewList =
-                pacienteCollection.Find(filterPaciente).ToList().Select(x => new SelectListItem()
+                _pacienteCollection.Find(filterPaciente).ToList().Select(x => new SelectListItem()
                 {
                     Value = x.PacienteGuid.ToString(),
                     Text = x.Name
+                });
+
+            var filterExames = Builders<Exame>.Filter.Regex("Descricao", "//");
+            ViewBag.examesViewList =
+                _examesCollection.Find(filterExames).ToList().Select(x => new SelectListItem()
+                {
+                    Text = x.Descricao
                 });
 
             return View();
@@ -68,11 +77,11 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         public async Task<ActionResult> Create(ResultadoExame person)
         {
             var filterPaciente = Builders<Paciente>.Filter.Eq("PacienteGuid", person.PacienteGuid);
-            person.Paciente = pacienteCollection.Find(filterPaciente).FirstOrDefault();
+            person.Paciente = _pacienteCollection.Find(filterPaciente).FirstOrDefault();
 
             person.UsuarioId = _userManager.GetUserName(User);
             
-            await resultadoCollection.InsertOneAsync(person);
+            await _resultadoCollection.InsertOneAsync(person);
             return RedirectToAction("Edit", new { resultadoGuid = person.ResultadoExameGuid });
         }
 
@@ -98,7 +107,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         public ActionResult Download(Guid imagemGuid, Guid resultadoGuid)
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+            var resultado = _resultadoCollection.Find(filter).FirstOrDefault();
 
             var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
 
@@ -118,7 +127,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         {
             var fals = Request.Form.Files;
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultado.ResultadoExameGuid);
-            var exame = resultadoCollection.Find(filter).FirstOrDefault();
+            var exame = _resultadoCollection.Find(filter).FirstOrDefault();
             var descricao = Request.Form["txtDescricao"].ToString();
 
             foreach (IFormFile file in fals)
@@ -129,13 +138,15 @@ namespace Showaspnetcore.Areas.Admin.Controllers
 
                 var pathInc = this.GetPathAndFilename(filename, resultado.ResultadoExameGuid.ToString());
                 var pasta = GetPathFolter(resultado.ResultadoExameGuid.ToString());
-                var local = "/exames/" + resultado.ResultadoExameGuid + "/" + filename;
+                var local = "/exames/" + resultado.ResultadoExameGuid;
 
-                if (!Directory.Exists(local))
+                string absolutePath = Path.Combine(_environment.WebRootPath, "exames", resultado.ResultadoExameGuid.ToString());//file system uses backslash "\"
+
+                if (!Directory.Exists(absolutePath + "//" + filename))
                 {
-                    Directory.CreateDirectory(local);
+                    Directory.CreateDirectory(absolutePath);
                 }
-
+                
                 using (FileStream output = System.IO.File.Create(pathInc))
                     file.CopyTo(output);
 
@@ -143,7 +154,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
                 {
                     ResultadoExameGuid = resultado.ResultadoExameGuid,
                     Descricao = descricao,
-                    Local = local,
+                    Local = local + "//" + filename,
                     FileName = filename,
                     Length = file.Length,
                     Formato = file.ContentType
@@ -153,7 +164,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
                 var update = Builders<ResultadoExame>.Update
                     .Set("Imagens", exame.Imagens);
 
-                var result = await resultadoCollection.UpdateOneAsync(filterUpdate, update);
+                var result = await _resultadoCollection.UpdateOneAsync(filterUpdate, update);
 
             }
             return RedirectToAction("Edit", new {resultadoGuid = resultado.ResultadoExameGuid});
@@ -169,25 +180,25 @@ namespace Showaspnetcore.Areas.Admin.Controllers
 
         private string GetPathAndFilename(string filename, string pathUser)
         {
-            return _env.WebRootPath + "\\exames\\" + pathUser + "\\" + filename;
+            return _environment.WebRootPath + "\\exames\\" + pathUser + "\\" + filename;
         }
         private string GetPathFolter(string pathUser)
         {
-            return _env.WebRootPath + "\\exames\\" + pathUser;
+            return _environment.WebRootPath + "\\exames\\" + pathUser;
         }
         public IActionResult Edit(Guid resultadoGuid)
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+            var resultado = _resultadoCollection.Find(filter).FirstOrDefault();
 
-            ViewBag.PastaRoot = _env.WebRootPath;
+            ViewBag.PastaRoot = _environment.WebRootPath;
             return View(resultado);
         }
 
         public IActionResult DeleteFile(Guid imagemGuid, Guid resultadoGuid)
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+            var resultado = _resultadoCollection.Find(filter).FirstOrDefault();
 
             var imagem = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
 
@@ -198,7 +209,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
             var update = Builders<ResultadoExame>.Update
                 .Set("Imagens", resultado.Imagens);
 
-            resultadoCollection.UpdateOneAsync(filterUpdate, update);
+            _resultadoCollection.UpdateOneAsync(filterUpdate, update);
 
             var pathFull = GetPathAndFilename(imagem.Local, resultado.ResultadoExameGuid.ToString());
             if (System.IO.File.Exists(pathFull))
@@ -213,7 +224,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
         public IActionResult AlterarDescricao(Guid imagemGuid, Guid resultadoExameGuid, string descricao)
         {
             var filter = Builders<ResultadoExame>.Filter.Eq("ResultadoExameGuid", resultadoExameGuid);
-            var resultado = resultadoCollection.Find(filter).FirstOrDefault();
+            var resultado = _resultadoCollection.Find(filter).FirstOrDefault();
             var imagemResult = resultado.Imagens.FirstOrDefault(x => x.ImagemGuid == imagemGuid);
 
             imagemResult.Descricao = descricao;

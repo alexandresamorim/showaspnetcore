@@ -9,22 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using MongoDB.Driver;
 using Showaspnetcore.Data;
-using Showaspnetcore.Model;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Showaspnetcore.Controllers
+namespace Showaspnetcore.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "ADMINISTRATOR")]
     public class PacientesController : Controller
     {
-        private IMongoCollection<Paciente> paciente;
+        private readonly IMongoCollection<Paciente> _pacienteCollection;
 
         public PacientesController(MongoClient client)
         {
             var database = client.GetDatabase("resultadofacildb");
-            paciente = database.GetCollection<Paciente>("Pacientes");
+            _pacienteCollection = database.GetCollection<Paciente>("Pacientes");
         }
 
         // GET: /<controller>/
@@ -37,8 +36,8 @@ namespace Showaspnetcore.Controllers
             var pageSize = 3;
 
             var filter = Builders<Paciente>.Filter.Regex("Name", "/" + pesquisa + "/");
-            var totalItemCount = paciente.Find(filter).Count();
-            var pacientes = paciente.Find(filter).Skip(pageNumber > 0 ? ((pageNumber - 1) * pageSize) : 0).Limit(pageSize).ToList();
+            var totalItemCount = _pacienteCollection.Find(filter).Count();
+            var pacientes = _pacienteCollection.Find(filter).Skip(pageNumber > 0 ? ((pageNumber - 1) * pageSize) : 0).Limit(pageSize).ToList();
             
             ViewData["PageNumber"] = pageNumber;
             ViewData["PageSize"] = pageSize;
@@ -51,7 +50,7 @@ namespace Showaspnetcore.Controllers
         public ActionResult Create()
         {
             var paciente = new Paciente();
-            paciente.ChaveAcesso = AlfanumericoAleatorio(6);
+            paciente.ChaveAcesso = AlfanumericoAleatorio(8);
             return View(paciente);
         }
 
@@ -59,7 +58,7 @@ namespace Showaspnetcore.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(Paciente person)
         {
-            await paciente.InsertOneAsync(person);
+            await _pacienteCollection.InsertOneAsync(person);
             return RedirectToAction(nameof(Index));
         }
 
@@ -68,7 +67,7 @@ namespace Showaspnetcore.Controllers
             var filterBuilder = Builders<Paciente>.Filter;
             var filterOn = filterBuilder.Eq("PacienteGuid", pacienteGuid);
 
-            var pacientes = paciente.Find(filterOn).FirstOrDefault();
+            var pacientes = _pacienteCollection.Find(filterOn).FirstOrDefault();
 
             return View(pacientes);
         }
@@ -83,7 +82,7 @@ namespace Showaspnetcore.Controllers
                 .Set("Name", person.Name)
                 .Set("Proprietario", person.Responsavel);
 
-            var result = await paciente.UpdateOneAsync(filter, update);
+            var result = await _pacienteCollection.UpdateOneAsync(filter, update);
             if (result.ModifiedCount > 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -97,7 +96,7 @@ namespace Showaspnetcore.Controllers
         public async Task<ActionResult> Delete(Guid pacienteGuid)
         {
             var filter = Builders<Paciente>.Filter.Eq("PacienteGuid", pacienteGuid);
-            var deleted = await paciente.DeleteOneAsync(filter);
+            var deleted = await _pacienteCollection.DeleteOneAsync(filter);
 
             return RedirectToAction(nameof(Index));
         }
@@ -105,7 +104,7 @@ namespace Showaspnetcore.Controllers
         public async Task<ActionResult> Pesquisa(string pesquisa)
         {
             var filter = Builders<Paciente>.Filter.Regex("Name", pesquisa);
-            var find = await paciente.Find(filter).ToListAsync();
+            var find = await _pacienteCollection.Find(filter).ToListAsync();
 
             return Json(find);
         }
