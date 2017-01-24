@@ -40,7 +40,7 @@
                         <div class="form-group ">
                             <label class="control-label col-lg-2">Observação</label>
                             <div class="col-lg-10">
-                                <textarea class="form-control "  required></textarea>
+                                <textarea class="form-control " required></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -56,3 +56,9 @@
         </section>
     </div>
 </div>
+
+@section Breadcrumbs {
+    <li><i class="fa fa-home"></i><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li><i class="icon_documents_alt"></i><a asp-controller="Pacientes" asp-action="Index">Paciêntes</a></li>
+    <li><i class="icon_folder-add_alt"></i>Novo Paciênte</li>
+}

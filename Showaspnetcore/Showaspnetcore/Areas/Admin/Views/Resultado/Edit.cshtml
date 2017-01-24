@@ -3,83 +3,77 @@
 @{
     Layout = "_LayoutNice";
 }
-
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <form asp-area="Admin" asp-controller="Resultado" asp-action="UploadFiles" enctype="multipart/form-data" method="post">
-
             @Html.HiddenFor(f => f.ResultadoExameGuid)
-            <div class="box-body">
 
-
+            <section class="body-content">
                 @if (TempData["NossoErro"] != null)
-                {
+            {
                     <div class="alert alert-success" role="alert">
                         @TempData["NossoErro"]>
                         <a asp-controller="Resultados" asp-action="Index" class="alert-link"> click aqui para voltar.</a>
                     </div>
                 }
 
-                <div class="clearfix">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>
-                                        Paciênte: @Model.Paciente.Name <small></small>
-                                    </h2>
-                                    <h4>
-                                        Exame: @Model.Exame <small></small>
-                                    </h4>
-                                    <div class="clearfix"></div>
-                                </div>
+            </section>
 
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">Inclusão de arquivos</div>
-                                    <div class="panel-body">
-                                        <div class="input-group">
-                                            <input type="file" name="files" multiple class="form-control" />
-                                        </div>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="txtDescricao" placeholder="Descrição do arquivo">
-                                            <span class="input-group-btn">
-                                                <input type="submit" value="Adicionar" class="btn btn-success" />
-                                            </span>
-                                        </div><!-- /input-group -->
-                                    </div>
-                                </div>
-                                <hr />
-                                <table class="table table-striped">
-                                    <tr>
-                                        <th>Descrição</th>
-                                        <th>Arquivo</th>
-                                        <th>Tamanho</th>
-                                        <th></th>
-                                    </tr>
-                                    <tbody>
-                                        @foreach (var image in Model.Imagens)
-                                        {
-                                            <tr>
-                                                <td>@image.Descricao</td>
-                                                <td>@image.Formato</td>
-
-                                                <td>@((image.Length / 1024).ToString("N2")) KB</td>
-                                                <td class="project-actions">
-                                                    <a asp-area="Admin" asp-controller="Resultado" asp-action="DeleteFile"
-                                                       asp-route-imagemGuid="@image.ImagemGuid"
-                                                       asp-route-resultadoGuid="@image.ResultadoExameGuid"
-                                                       class="btn btn-danger"><i class="icon_close_alt2"></i></a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-
+            <div class="box-body">
+                <div class="x_panel">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Paciênte: @Model.Paciente.Name
+                            <span class="pull-right">
+                                Exame: @Model.Exame
+                            </span></div>
+                        <div class="panel-body">
+                            <div class="input-group">
+                                <input type="file" name="files" multiple class="form-control" />
                             </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="txtDescricao" placeholder="Descrição do arquivo">
+                                <span class="input-group-btn">
+                                    <input type="submit" value="Adicionar" class="btn btn-success" />
+                                </span>
+                            </div><!-- /input-group -->
+                            <hr/>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Arquivo</th>
+                                    <th>Tamanho</th>
+                                    <th></th>
+                                </tr>
+                                <tbody>
+                                    @foreach (var image in Model.Imagens)
+                                    {
+                                        <tr>
+                                            <td>@image.Descricao</td>
+                                            <td>@image.Formato</td>
+
+                                            <td>@((image.Length / 1024).ToString("N2")) KB</td>
+                                            <td class="project-actions">
+                                                <a asp-area="Admin" asp-controller="Resultado" asp-action="DeleteFile"
+                                                   asp-route-imagemGuid="@image.ImagemGuid"
+                                                   asp-route-resultadoGuid="@image.ResultadoExameGuid"
+                                                   class="btn btn-danger"><i class="icon_close_alt2"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+
+
+
             </div>
         </form>
     </div>
 </div>
+@section Breadcrumbs {
+    <li><i class="fa fa-home"></i><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li><i class="icon_documents_alt"></i><a asp-controller="Resultado" asp-action="Index">Resultados</a></li>
+    <li><i class="icon_folder-add_alt"></i>Inclusão de arquivos</li>
+}

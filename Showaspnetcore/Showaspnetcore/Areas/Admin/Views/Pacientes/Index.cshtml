@@ -12,49 +12,42 @@
     <div class="panel-body">
         <div class="table-responsive">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="panel-heading">
-                    <span>Pacientes</span>
-                    <span class="pull-right">
-                        <a asp-action="Create">Criar novo</a>
-                    </span>
-                </div>
-                <form asp-action="Index" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-                    <p>
-                        Title: @Html.TextBox("pesquisa")
-                        <input type="submit" value="Pesquisar" />
-                    </p>
+                <form asp-action="Index" id="demo-form2"  class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="pesquisa" placeholder="Digite aqui sua triagem">
+                    </div>
+                    <input type="submit" value="Pesquisar" class="btn btn-info"/>
                 </form>
                 <!-- box (Contas Receber) -->
                 <div class="x_panel">
                     <div class="table-responsive">
                         <table id="example1" class="table table-striped">
                             <thead>
-                            <tr>
-                                <th>Paciênte</th>
-                                <th>Responsável</th>
-                                <th>Chave de Acesso</th>
-                                <th></th>
-                                <th class="text-right"></th>
-                                <th></th>
-                            </tr>
+                                <tr>
+                                    <th>Paciênte</th>
+                                    <th>Responsável</th>
+                                    <th>Chave de Acesso</th>
+                                    <th></th>
+                                    <th class="text-right"></th>
+                                    <th></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.Responsavel</td>
-                                    <td>@item.ChaveAcesso</td>
-                                    <td></td>
-                                    <td class="project-actions">
-                                        <a asp-controller="Pacientes" asp-action="Detail" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
-                                    </td>
-                                    <td class="project-actions">
-                                        <a asp-controller="Pacientes" asp-action="Delete" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Deletar </a>
-                                    </td>
-                                </tr>
-                            }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Responsavel</td>
+                                        <td>@item.ChaveAcesso</td>
+                                        <td></td>
+                                        <td class="project-actions">
+                                            <a asp-controller="Pacientes" asp-action="Detail" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="fa fa-folder"></i> Detalhe </a>
+                                        </td>
+                                        <td class="project-actions">
+                                            <a asp-controller="Pacientes" asp-action="Delete" asp-route-pacienteGuid=@item.PacienteGuid class="btn btn-white btn-sm"><i class="icon_close_alt2"></i> Deletar </a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div><!-- /.box-body -->
@@ -72,14 +65,11 @@
 </div>
 
 @section Breadcrumbs {
-    <ol class="breadcrumb">
-        <li>
-            <a asp-controller="Home" asp-action="Index">Home</a>
-        </li>
-        <li class="active ng-binding">
-            <a href="javascript:;">Pacientes</a>
-        </li>
-    </ol>
+    <li><i class="fa fa-home"></i><a asp-controller="Home" asp-action="Index">Home</a></li>
+    <li><i class="icon_documents_alt"></i>Paciêntes</li>
+    <span class="pull-right">
+        <a asp-action="Create">Criar novo</a>
+    </span>
 }
 @section Scripts {
     <script type="text/javascript">

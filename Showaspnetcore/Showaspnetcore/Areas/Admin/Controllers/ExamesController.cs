@@ -30,7 +30,7 @@ namespace Showaspnetcore.Areas.Admin.Controllers
                 pesquisa = string.Empty;
 
             var pageNumber = page ?? 1;
-            var pageSize = 3;
+            var pageSize = 10;
 
             var filter = Builders<Exame>.Filter.Regex("Descricao", "/" + pesquisa + "/");
             var totalItemCount = examesCollection.Find(filter).Count();
